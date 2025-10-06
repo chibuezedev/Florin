@@ -1,0 +1,142 @@
+// Core type definitions for the university financial management system
+
+export type PaymentStatus = "completed" | "pending" | "failed" | "flagged"
+export type UserRole = "student" | "faculty" | "staff" | "admin"
+export type PaymentType = "tuition" | "departmental" | "faculty_allocation" | "grant" | "student_services"
+export type ThreatLevel = "low" | "medium" | "high" | "critical"
+
+export interface User {
+  id: string
+  name: string
+  email: string
+  role: UserRole
+  department?: string
+  studentId?: string
+  employeeId?: string
+  avatar?: string
+  joinedDate: string
+}
+
+export interface Transaction {
+  id: string
+  userId: string
+  userName: string
+  amount: number
+  type: PaymentType
+  status: PaymentStatus
+  date: string
+  description: string
+  department?: string
+  reference?: string
+  email?: string
+  phone?: number
+  semester?: string
+  academicYear?: string
+  paymentMethod?: string
+}
+
+export interface AIAlert {
+  id: string
+  userId: string
+  userName: string
+  type: "behavioral" | "access" | "transaction" | "login"
+  severity: ThreatLevel
+  description: string
+  timestamp: string
+  anomalyScore: number
+  details: {
+    typingRhythm?: number
+    accessPattern?: string
+    transactionFrequency?: number
+    failedLogins?: number
+    unusualTime?: boolean
+    locationAnomaly?: boolean
+  }
+  resolved: boolean
+}
+
+export interface AccessLog {
+  id: string
+  userId: string
+  userName: string
+  action: string
+  resource: string
+  timestamp: string
+  ipAddress: string
+  success: boolean
+  riskScore: number
+}
+
+export interface DashboardStats {
+  totalPayments: number
+  pendingTransactions: number
+  activeAlerts: number
+  totalUsers: number
+  monthlyRevenue: number
+  revenueChange: number
+  transactionVolume: number
+  volumeChange: number
+}
+
+export interface BiometricData {
+  userId: string
+  typingSpeed: number // words per minute
+  typingRhythm: number // consistency score 0-100
+  mouseMovementPattern: number // consistency score 0-100
+  accessTimePattern: string[] // typical access hours
+  averageSessionDuration: number // minutes
+  deviceFingerprint: string
+}
+
+// Notification interface
+export interface Notification {
+  id: string
+  type: "security" | "payment" | "system" | "user"
+  title: string
+  message: string
+  timestamp: string
+  read: boolean
+  priority: "low" | "medium" | "high"
+  actionUrl?: string
+  userId?: string
+  userName?: string
+}
+
+// Student-specific types
+export interface StudentProfile {
+  id: string
+  regNumber: string
+  name: string
+  email: string
+  department: string
+  program: string
+  level: string
+  avatar?: string
+  enrollmentDate: string
+  totalPaid: number
+  totalPending: number
+}
+
+export interface StudentPayment {
+  id: string
+  studentId: string
+  type: "tuition" | "accommodation" | "library" | "medical" | "sports" | "exam" | "other"
+  amount: number
+  status: "paid" | "pending" | "overdue"
+  dueDate: string
+  paidDate?: string
+  semester: string
+  academicYear: string
+  description: string
+  reference?: string
+}
+
+export interface PaymentItem {
+  id: string
+  name: string
+  amount: number
+  type: StudentPayment["type"]
+  dueDate: string
+  status: StudentPayment["status"]
+  description: string
+}
