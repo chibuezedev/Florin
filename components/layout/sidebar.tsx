@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
@@ -11,7 +11,7 @@ import {
   Shield,
   Bell,
   Settings,
-  TrendingUp,
+  LogOut ,
   UserCircle,
 } from "lucide-react";
 
@@ -23,7 +23,6 @@ const navigation = [
   { name: "Departments", href: "/admin/departments", icon: Building2 },
   { name: "Staff", href: "/admin/staff", icon: Briefcase },
   { name: "Users", href: "/admin/users", icon: UserCircle },
-  // { name: "Analytics", href: "/admin/analytics", icon: TrendingUp },
   { name: "Notifications", href: "/admin/notifications", icon: Bell },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
@@ -31,13 +30,16 @@ const navigation = [
 export function Sidebar() {
   const pathname = usePathname();
 
+ const router = useRouter();
+
+  const handleLogout = () => {
+    router.push("/");
+  };
+
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-slate-800 bg-navy-900">
       <div className="flex h-full flex-col">
         <div className="flex h-16 items-center gap-3 border-b border-slate-800 px-6">
-          {/* <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-gold-500 to-gold-600">
-            <Shield className="h-6 w-6 text-navy-900" />
-          </div> */}
           <div>
             <h1 className="text-lg font-semibold text-white">UniFinance</h1>
             <p className="text-xs text-slate-400">Uni Portal</p>
@@ -69,7 +71,7 @@ export function Sidebar() {
         <div className="border-t border-slate-800 p-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 text-sm font-semibold text-white">
-              UniFinance
+              UF
             </div>
             <div className="flex-1 overflow-hidden">
               <p className="truncate text-sm font-medium text-white">
@@ -79,6 +81,13 @@ export function Sidebar() {
                 admin@unifinace.edu
               </p>
             </div>
+                <button
+              onClick={handleLogout}
+              className="p-2 rounded-md hover:bg-slate-800 text-slate-400 hover:text-red-500 transition-colors"
+              title="Logout"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
         </div>
       </div>
