@@ -14,6 +14,7 @@ import {
   LogOut ,
   UserCircle,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const navigation = [
   { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
@@ -29,10 +30,12 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
+   const { user, logout } = useAuth();
 
  const router = useRouter();
 
   const handleLogout = () => {
+    logout();
     router.push("/");
   };
 
@@ -71,14 +74,17 @@ export function Sidebar() {
         <div className="border-t border-slate-800 p-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 text-sm font-semibold text-white">
-              UF
+              {user?.name
+                ?.split(" ")
+                .map((n) => n[0])
+                .join("") || "AU"}
             </div>
             <div className="flex-1 overflow-hidden">
               <p className="truncate text-sm font-medium text-white">
-                Admin User
+                {user?.name || "Admin User"}
               </p>
               <p className="truncate text-xs text-slate-400">
-                admin@unifinace.edu
+                {user?.email || "N/A"}
               </p>
             </div>
                 <button

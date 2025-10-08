@@ -134,7 +134,6 @@ export default function LandingPage() {
           </motion.p>
         </motion.div>
 
-        {/* Portal Cards */}
         <motion.div
           className="mt-20 grid gap-6 md:grid-cols-2 max-w-5xl mx-auto"
           variants={containerVariants}

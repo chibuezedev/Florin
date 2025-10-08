@@ -5,26 +5,47 @@ import type React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { GraduationCap, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
 
 export default function StudentLoginPage() {
   const router = useRouter();
+  const { login, error, isLoading } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     regNumber: "",
     password: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.regNumber && formData.password) {
+    setLoading(true);
+
+    const credentials = {
+      studentId: formData.regNumber,
+      password: formData.password,
+    };
+
+    const success = await login(credentials);
+
+    if (success) {
       localStorage.setItem("studentRegNumber", formData.regNumber);
       router.push("/student/dashboard");
     }
+    setLoading(false);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950 flex items-center justify-center p-6">
@@ -120,7 +141,7 @@ export default function StudentLoginPage() {
           <div className="mt-6 text-center text-sm text-slate-400">
             {"Don't have an account? "}
             <Link
-              href="/student/signup"
+              href="/auth/student/signup"
               className="text-gold-400 hover:text-gold-300 font-medium transition-colors"
             >
               Sign up here
