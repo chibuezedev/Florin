@@ -68,4 +68,11 @@ export const paymentService = {
     });
     return response.json();
   },
+
+  getPayments: async () => {
+    const response = await fetch(`${API_BASE_URL}/payments`, {
+      headers: getAuthHeaders(),
+    });
+    return response.json();
+  },
 };

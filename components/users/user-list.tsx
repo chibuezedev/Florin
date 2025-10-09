@@ -111,7 +111,7 @@ export function UserList({ users }: UserListProps) {
         <div className="space-y-3">
           {filteredUsers.map((user) => (
             <div
-              key={user.id}
+              key={user._id}
               className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-800/30 p-4"
             >
               <div className="flex items-center gap-4">
@@ -131,7 +131,7 @@ export function UserList({ users }: UserListProps) {
                   <Badge className={`border ${getRoleBadgeColor(user.role)} capitalize`}>{user.role}</Badge>
                   {user.department && <p className="mt-1 text-xs text-slate-500">{user.department}</p>}
                 </div>
-                <Link href={`/users/${user.id}`}>
+                <Link href={`/admin/users/${user._id}`}>
                   <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-white">
                     <Eye className="h-4 w-4" />
                   </Button>

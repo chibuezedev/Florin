@@ -1,22 +1,31 @@
-import { mockTransactions, mockUsers } from "@/lib/mock-data"
-import { PaymentTable } from "@/components/payments/payment-table"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, Briefcase, DollarSign } from "lucide-react"
+"use client";
+import { useUsers } from "@/hooks/useUser";
+import { useAllPayments } from "@/hooks/usePayments";
+import { PaymentTable } from "@/components/payments/payment-table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, Briefcase, DollarSign } from "lucide-react";
 
 export default function StaffPage() {
-  const staffUsers = mockUsers.filter((u) => u.role === "staff")
-  const staffTransactions = mockTransactions.filter((t) => {
-    const user = mockUsers.find((u) => u.id === t.userId)
-    return user?.role === "staff"
-  })
+  const { users } = useUsers();
+  const staffUsers = users.filter((u) => u.role === "staff");
+  const { payments } = useAllPayments();
+  const staffTransactions = payments.filter((t) => {
+    const user = users.find((u) => u._id === t.userId);
+    return user?.role === "staff";
+  });
 
-  const totalStaffPayments = staffTransactions.reduce((sum, t) => sum + t.amount, 0)
+  const totalStaffPayments = staffTransactions.reduce(
+    (sum, t) => sum + (t.amount || 0),
+    0
+  );
 
   return (
     <div className="space-y-6 p-8">
       <div>
         <h1 className="text-3xl font-bold text-white">Staff Management</h1>
-        <p className="mt-1 text-slate-400">Manage staff accounts and related transactions</p>
+        <p className="mt-1 text-slate-400">
+          Manage staff accounts and related transactions
+        </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -27,7 +36,9 @@ export default function StaffPage() {
             </div>
             <div>
               <p className="text-sm text-slate-400">Total Staff</p>
-              <p className="text-2xl font-bold text-white">{staffUsers.length}</p>
+              <p className="text-2xl font-bold text-white">
+                {staffUsers.length}
+              </p>
             </div>
           </div>
         </Card>
@@ -38,7 +49,9 @@ export default function StaffPage() {
             </div>
             <div>
               <p className="text-sm text-slate-400">Active Transactions</p>
-              <p className="text-2xl font-bold text-white">{staffTransactions.length}</p>
+              <p className="text-2xl font-bold text-white">
+                {staffTransactions.length}
+              </p>
             </div>
           </div>
         </Card>
@@ -49,7 +62,9 @@ export default function StaffPage() {
             </div>
             <div>
               <p className="text-sm text-slate-400">Total Payments</p>
-              <p className="text-2xl font-bold text-white">${(totalStaffPayments / 1000).toFixed(1)}K</p>
+              <p className="text-2xl font-bold text-white">
+                ${(totalStaffPayments / 1000).toFixed(1)}K
+              </p>
             </div>
           </div>
         </Card>
@@ -57,20 +72,22 @@ export default function StaffPage() {
 
       <Card className="border-slate-800 bg-slate-900/50 backdrop-blur">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-white">Staff Directory</CardTitle>
+          <CardTitle className="text-lg font-semibold text-white">
+            Staff Directory
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {staffUsers.map((user) => (
               <div
-                key={user.id}
+                key={user._id}
                 className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-800/30 p-4"
               >
                 <div className="flex items-center gap-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-lg font-semibold text-white">
                     {user.name
                       .split(" ")
-                      .map((n) => n[0])
+                      .map((n: string) => n[0])
                       .join("")}
                   </div>
                   <div>
@@ -79,8 +96,12 @@ export default function StaffPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-slate-300">{user.department}</p>
-                  <p className="text-xs text-slate-500">ID: {user.employeeId}</p>
+                  <p className="text-sm font-medium text-slate-300">
+                    {user.department}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    ID: {user.employeeId}
+                  </p>
                 </div>
               </div>
             ))}
@@ -88,7 +109,10 @@ export default function StaffPage() {
         </CardContent>
       </Card>
 
-      <PaymentTable transactions={staffTransactions} title="Staff Transactions" />
+      <PaymentTable
+        transactions={staffTransactions}
+        title="Staff Transactions"
+      />
     </div>
-  )
+  );
 }

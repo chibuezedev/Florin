@@ -1,12 +1,15 @@
-import { mockUsers } from "@/lib/mock-data"
-import { UserList } from "@/components/users/user-list"
-import { Card } from "@/components/ui/card"
-import { Users, GraduationCap, Briefcase, UserCheck } from "lucide-react"
+'use client'
+
+import { useUsers } from "@/hooks/useUser";
+import { UserList } from "@/components/users/user-list";
+import { Card } from "@/components/ui/card";
+import { Users, GraduationCap, Briefcase, UserCheck } from "lucide-react";
 
 export default function UsersPage() {
-  const studentCount = mockUsers.filter((u) => u.role === "student").length
-  const facultyCount = mockUsers.filter((u) => u.role === "faculty").length
-  const staffCount = mockUsers.filter((u) => u.role === "staff").length
+  const { users } = useUsers();
+  const studentCount = users.filter((u) => u.role === "student").length;
+  const facultyCount = users.filter((u) => u.role === "faculty").length;
+  const staffCount = users.filter((u) => u.role === "staff").length;
 
   return (
     <div className="space-y-6 p-8">
@@ -23,7 +26,9 @@ export default function UsersPage() {
             </div>
             <div>
               <p className="text-sm text-slate-400">Total Users</p>
-              <p className="text-2xl font-bold text-white">{mockUsers.length}</p>
+              <p className="text-2xl font-bold text-white">
+                {users.length}
+              </p>
             </div>
           </div>
         </Card>
@@ -62,7 +67,7 @@ export default function UsersPage() {
         </Card>
       </div>
 
-      <UserList users={mockUsers} />
+      <UserList users={users} />
     </div>
-  )
+  );
 }

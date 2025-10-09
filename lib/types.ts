@@ -1,12 +1,10 @@
-// Core type definitions for the university financial management system
-
 export type PaymentStatus = "completed" | "pending" | "failed" | "flagged"
 export type UserRole = "student" | "faculty" | "staff" | "admin"
 export type PaymentType = "tuition" | "departmental" | "faculty_allocation" | "grant" | "student_services"
 export type ThreatLevel = "low" | "medium" | "high" | "critical"
 
 export interface User {
-  id: string
+  _id: string
   name: string
   email: string
   role: UserRole
@@ -14,7 +12,7 @@ export interface User {
   studentId?: string
   employeeId?: string
   avatar?: string
-  joinedDate: string
+  createdAt: string
 }
 
 export interface Transaction {
@@ -22,17 +20,25 @@ export interface Transaction {
   userId: string
   userName: string
   amount: number
-  type: PaymentType
+  paymentType: PaymentType
   status: PaymentStatus
   date: string
   description: string
   department?: string
-  reference?: string
+  transactionReference?: string
   email?: string
   phone?: number
   semester?: string
   academicYear?: string
   paymentMethod?: string
+  studentId: {
+    _id: string,
+    name: string,
+    email: string,
+    department: string,
+    studentId: string
+  },
+  createdAt: string
 }
 
 export interface AIAlert {

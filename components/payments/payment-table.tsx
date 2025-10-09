@@ -34,10 +34,10 @@ export function PaymentTable({ transactions, title, type }: PaymentTableProps) {
 
   const filteredTransactions = transactions.filter((t) => {
     const matchesSearch =
-      t.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.studentId.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.reference?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = !type || t.type === type;
+      t.transactionReference?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesType = !type || t.paymentType === type;
     return matchesSearch && matchesType;
   });
 
@@ -106,10 +106,11 @@ export function PaymentTable({ transactions, title, type }: PaymentTableProps) {
                     <td className="py-4">
                       <div>
                         <p className="font-medium text-white">
-                          {transaction.userName}
+                          {transaction.studentId.name}
                         </p>
                         <p className="text-xs text-slate-400">
-                          {transaction.department}
+                          {transaction.studentId.studentId} -{" "}
+                          {transaction.studentId.department}
                         </p>
                       </div>
                     </td>
@@ -130,10 +131,10 @@ export function PaymentTable({ transactions, title, type }: PaymentTableProps) {
                       </Badge>
                     </td>
                     <td className="py-4 text-slate-400">
-                      {formatDateTime(transaction.date)}
+                      {formatDateTime(transaction.createdAt)}
                     </td>
                     <td className="py-4 font-mono text-xs text-slate-400">
-                      {transaction.reference}
+                      {transaction.transactionReference}
                     </td>
                     <td className="py-4">
                       <Button
@@ -173,12 +174,14 @@ export function PaymentTable({ transactions, title, type }: PaymentTableProps) {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-slate-400">Student Name</p>
-                  <p className="font-medium">{selectedTransaction.userName}</p>
+                  <p className="font-medium">
+                    {selectedTransaction.studentId.name}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-slate-400">Department</p>
                   <p className="font-medium">
-                    {selectedTransaction.department}
+                    {selectedTransaction.studentId.department}
                   </p>
                 </div>
               </div>
@@ -186,7 +189,9 @@ export function PaymentTable({ transactions, title, type }: PaymentTableProps) {
               {selectedTransaction.email && (
                 <div>
                   <p className="text-sm text-slate-400">Email</p>
-                  <p className="font-medium">{selectedTransaction.email}</p>
+                  <p className="font-medium">
+                    {selectedTransaction.studentId.email}
+                  </p>
                 </div>
               )}
 
@@ -202,7 +207,7 @@ export function PaymentTable({ transactions, title, type }: PaymentTableProps) {
                   <div>
                     <p className="text-sm text-slate-400">Transaction Type</p>
                     <p className="font-medium capitalize">
-                      {selectedTransaction.type}
+                      {selectedTransaction.paymentType}
                     </p>
                   </div>
                   <div>
@@ -234,16 +239,16 @@ export function PaymentTable({ transactions, title, type }: PaymentTableProps) {
                 <div>
                   <p className="text-sm text-slate-400">Date</p>
                   <p className="font-medium">
-                    {formatDateTime(selectedTransaction.date)}
+                    {formatDateTime(selectedTransaction.createdAt)}
                   </p>
                 </div>
               </div>
 
-              {selectedTransaction.reference && (
+              {selectedTransaction.transactionReference && (
                 <div>
                   <p className="text-sm text-slate-400">Reference Number</p>
                   <p className="font-mono text-sm font-medium">
-                    {selectedTransaction.reference}
+                    {selectedTransaction.transactionReference}
                   </p>
                 </div>
               )}

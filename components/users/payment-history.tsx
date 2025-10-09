@@ -46,7 +46,7 @@ export function PaymentHistory({ transactions }: PaymentHistoryProps) {
                   <div>
                     <p className="font-medium text-white">{transaction.description}</p>
                     <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
-                      <span className="capitalize">{transaction.type.replace("_", " ")}</span>
+                      <span className="capitalize">{transaction.paymentType.replace("_", " ")}</span>
                       <span>•</span>
                       <span>{formatDateTime(transaction.date)}</span>
                     </div>
