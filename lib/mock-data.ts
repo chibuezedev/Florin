@@ -1,7 +1,5 @@
 import type {
-  Transaction,
   AIAlert,
-  User,
   AccessLog,
   DashboardStats,
   BiometricData,
@@ -9,7 +7,6 @@ import type {
   StudentProfile,
   StudentPayment,
 } from "./types";
-
 
 export const mockAIAlerts: AIAlert[] = [
   {
@@ -154,6 +151,10 @@ export const mockBiometricData: BiometricData[] = [
     accessTimePattern: ["08:00-10:00", "14:00-16:00", "19:00-21:00"],
     averageSessionDuration: 45,
     deviceFingerprint: "fp_student_001",
+    logonPattern: 75,
+    mouseDynamics: 80,
+    emailContext: 80,
+    touchGesture: 70,
   },
   {
     userId: "u3",
@@ -163,6 +164,10 @@ export const mockBiometricData: BiometricData[] = [
     accessTimePattern: ["09:00-12:00", "13:00-17:00"],
     averageSessionDuration: 120,
     deviceFingerprint: "fp_staff_003",
+    logonPattern: 75,
+    mouseDynamics: 90,
+    emailContext: 80,
+    touchGesture: 75,
   },
 ];
 

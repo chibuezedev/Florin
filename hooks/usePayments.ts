@@ -1,8 +1,12 @@
 "use client";
 
+import useSWR from "swr";
 import { useState, useEffect } from "react";
 import { paymentService } from "../lib/api/paymentService";
 import { Transaction } from "../lib/types";
+import { Payment, CreatePaymentData } from "@/lib/types";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export const usePayments = (filters?: any) => {
   const [payments, setPayments] = useState([]);
@@ -86,4 +90,56 @@ export const useAllPayments = () => {
   }, []);
 
   return { payments, loading, error };
+};
+
+export const usePayouts = () => {
+  const [createdPayments, setCreatedPayments] = useState<Payment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { data, error, mutate } = useSWR<Payment[]>("/api/payouts", fetcher);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const fetchCreatedPayments = async () => {
+    try {
+      setIsLoading(true);
+      const response = await paymentService.getPayouts();
+      if (response.success) {
+        setCreatedPayments(response.data);
+      } else {
+        console.error("Error fetching payouts:", response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching payment:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const createPayment = async (paymentData: CreatePaymentData) => {
+    setIsCreating(true);
+    try {
+      const response = await paymentService.createPayment(paymentData);
+
+      const newPayment = await response.data;
+
+      return newPayment;
+    } catch (error) {
+      console.error("Error creating payment:", error);
+      throw error;
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCreatedPayments();
+  }, []);
+
+  return {
+    createdPayments,
+    isLoading,
+    isError: error,
+    isCreating,
+    createPayment,
+    mutate,
+  };
 };

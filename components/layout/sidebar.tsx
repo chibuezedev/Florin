@@ -11,13 +11,15 @@ import {
   Shield,
   Bell,
   Settings,
-  LogOut ,
+  LogOut,
   UserCircle,
+  Wallet,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const navigation = [
   { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
+  { name: "Manage Payment", href: "/admin/payment", icon: Wallet },
   { name: "Threat Detection", href: "/admin/ai-insights", icon: Shield },
   { name: "Students", href: "/admin/students", icon: GraduationCap },
   { name: "Faculty", href: "/admin/faculty", icon: Users },
@@ -30,9 +32,9 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
-   const { user, logout } = useAuth();
+  const { user, logout } = useAuth();
 
- const router = useRouter();
+  const router = useRouter();
 
   const handleLogout = () => {
     logout();
@@ -87,7 +89,7 @@ export function Sidebar() {
                 {user?.email || "N/A"}
               </p>
             </div>
-                <button
+            <button
               onClick={handleLogout}
               className="p-2 rounded-md hover:bg-slate-800 text-slate-400 hover:text-red-500 transition-colors"
               title="Logout"

@@ -1,3 +1,5 @@
+import { CreatePaymentData } from "@/lib/types";
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
@@ -72,6 +74,22 @@ export const paymentService = {
   getPayments: async () => {
     const response = await fetch(`${API_BASE_URL}/payments`, {
       headers: getAuthHeaders(),
+    });
+    return response.json();
+  },
+
+  getPayouts: async () => {
+    const response = await fetch(`${API_BASE_URL}/payouts`, {
+      headers: getAuthHeaders(),
+    });
+    return response.json();
+  },
+
+  createPayment: async (data: CreatePaymentData) => {
+    const response = await fetch(`${API_BASE_URL}/payouts`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
     });
     return response.json();
   },

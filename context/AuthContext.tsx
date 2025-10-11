@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
+import { biometricTracker } from "../lib/biometricTracker";
 
 const ENDPOINT = "http://localhost:5000/api";
 
@@ -99,12 +100,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
+    const biometrics = biometricTracker.collectData();
     try {
       setError(null);
       const response = await fetch(`${ENDPOINT}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify({ ...credentials, biometrics }),
       });
 
       const data = await response.json();

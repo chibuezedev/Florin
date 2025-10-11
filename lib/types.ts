@@ -15,6 +15,57 @@ export interface User {
   createdAt: string
 }
 
+export interface Payment {
+  _id: string;
+  title: string;
+  description: string;
+  amount: number;
+  paymentType: string;
+  targetType: string;
+  departments?: string[];
+  faculties?: string[];
+  levels?: string[];
+  semester: string;
+  academicYear: string;
+  dueDate: string;
+  isActive: boolean;
+  appliedToCount: number;
+  totalExpectedRevenue: number;
+  paidCount: number;
+  pendingCount: number;
+  createdAt: string;
+}
+
+export interface BiometricData {
+  userId: string
+  typingSpeed: number // words per minute
+  typingRhythm: number // consistency score 0-100
+  mouseMovementPattern: number // consistency score 0-100
+  accessTimePattern: string[] // typical access hours
+  averageSessionDuration: number // minutes
+  deviceFingerprint: string,
+  logonPattern: number // consistency score 0-100
+  mouseDynamics: number // consistency score 0-100
+  emailContext: number // typical email language/context score 0-100
+  touchGesture: number // consistency score 0-100
+}
+
+export interface CreatePaymentData {
+  title: string
+  description: string
+  amount: number
+  paymentType: string
+  semester: string
+  academicYear: string
+  dueDate: string
+  targetType: "all" | "department" | "faculty" | "level"
+  departments?: string[]
+  faculties?: string[]
+  levels?: string[]
+  notes?: string
+  biometrics: any
+}
+
 export interface Transaction {
   id: string
   userId: string
@@ -84,15 +135,6 @@ export interface DashboardStats {
   volumeChange: number
 }
 
-export interface BiometricData {
-  userId: string
-  typingSpeed: number // words per minute
-  typingRhythm: number // consistency score 0-100
-  mouseMovementPattern: number // consistency score 0-100
-  accessTimePattern: string[] // typical access hours
-  averageSessionDuration: number // minutes
-  deviceFingerprint: string
-}
 
 // Notification interface
 export interface Notification {
