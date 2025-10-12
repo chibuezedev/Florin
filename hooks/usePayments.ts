@@ -33,7 +33,7 @@ export const usePayments = (filters?: any) => {
     fetchPayments();
   }, [JSON.stringify(filters)]);
 
-  return { payments, loading, error };
+  return { payments, loading, error, count: payments.length };
 };
 
 export const usePaymentSummary = () => {

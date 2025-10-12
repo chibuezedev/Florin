@@ -43,7 +43,7 @@ export default function StudentDashboard() {
     );
   }
 
-  const { totalPaid, totalPending, pendingPayments, recentTransactions } =
+  const { totalPaid, totalPending, pendingPayments, recentTransactions, completedPayments } =
     summary;
 
   return (
@@ -77,7 +77,7 @@ export default function StudentDashboard() {
             </div>
             <p className="text-sm text-slate-400 mb-1">Total Paid</p>
             <p className="text-3xl font-bold text-white">
-              {formatCurrency(totalPaid)}
+              {formatCurrency(completedPayments.reduce((sum: number, p: any) => sum + p.amount, 0))}
             </p>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function StudentDashboard() {
             </div>
             <p className="text-sm text-slate-400 mb-1">Pending Payments</p>
             <p className="text-3xl font-bold text-white">
-              {formatCurrency(totalPending)}
+              {formatCurrency(pendingPayments.reduce((sum: number, p: any) => sum + p.amount, 0))}
             </p>
           </div>
         </div>

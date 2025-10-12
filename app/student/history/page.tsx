@@ -19,53 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const mockPayments = [
-  {
-    id: "1",
-    description: "Tuition Fee - First Semester",
-    amount: 250000,
-    status: "paid",
-    date: "2024-01-15",
-    reference: "TXN-2024-001",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-  },
-  {
-    id: "2",
-    description: "Accommodation Fee",
-    amount: 80000,
-    status: "paid",
-    date: "2024-01-20",
-    reference: "TXN-2024-002",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-  },
-  {
-    id: "3",
-    description: "Laboratory Fee",
-    amount: 15000,
-    status: "pending",
-    date: "2024-02-01",
-    reference: "TXN-2024-003",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-  },
-  {
-    id: "4",
-    description: "Library Fee",
-    amount: 5000,
-    status: "paid",
-    date: "2024-01-18",
-    reference: "TXN-2024-004",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-  },
-];
+import { usePayments } from "../../../hooks/usePayments";
 
 export default function PaymentHistoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const { payments, count } = usePayments(
+    statusFilter === "all" ? {} : { status: statusFilter }
+  );
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -87,6 +48,30 @@ export default function PaymentHistoryPage() {
       failed: "bg-red-500/10 text-red-400 border-red-500/20",
     };
     return styles[status as keyof typeof styles] || "";
+  };
+
+  function formatCurrency(amount: number) {
+    return `₦${amount.toLocaleString("en-NG")}`;
+  }
+
+  const totalPaid = (payments: any[]) => {
+    const total = payments.reduce((acc: number, payment: any) => {
+      if (payment.status === "paid") {
+        return acc + payment.amount;
+      }
+      return acc;
+    }, 0);
+    return formatCurrency(Math.floor(total));
+  };
+
+  const totalPending = (payments: any[]) => {
+    const total = payments.reduce((acc: number, payment: any) => {
+      if (payment.status === "pending") {
+        return acc + payment.amount;
+      }
+      return acc;
+    }, 0);
+    return formatCurrency(Math.floor(total));
   };
 
   return (
@@ -111,7 +96,9 @@ export default function PaymentHistoryPage() {
               </div>
               <span className="text-xs text-slate-400">This Year</span>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-1">₦350,000</h3>
+            <h3 className="text-2xl font-bold text-white mb-1">
+              {totalPaid(payments)}
+            </h3>
             <p className="text-sm text-slate-400">Total Paid</p>
           </div>
 
@@ -122,7 +109,9 @@ export default function PaymentHistoryPage() {
               </div>
               <span className="text-xs text-slate-400">Outstanding</span>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-1">₦15,000</h3>
+            <h3 className="text-2xl font-bold text-white mb-1">
+              {totalPending(payments)}
+            </h3>
             <p className="text-sm text-slate-400">Pending Payments</p>
           </div>
 
@@ -133,7 +122,7 @@ export default function PaymentHistoryPage() {
               </div>
               <span className="text-xs text-slate-400">All Time</span>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-1">24</h3>
+            <h3 className="text-2xl font-bold text-white mb-1">{count}</h3>
             <p className="text-sm text-slate-400">Total Transactions</p>
           </div>
         </div>
@@ -198,7 +187,7 @@ export default function PaymentHistoryPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {mockPayments.map((payment) => (
+                {payments.map((payment: any) => (
                   <tr
                     key={payment.id}
                     className="hover:bg-slate-800/30 transition-colors"
@@ -206,7 +195,7 @@ export default function PaymentHistoryPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-sm text-slate-300">
                         <Calendar className="h-4 w-4 text-slate-500" />
-                        {new Date(payment.date).toLocaleDateString()}
+                        {new Date(payment.updatedAt).toLocaleDateString()}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -221,7 +210,7 @@ export default function PaymentHistoryPage() {
                     </td>
                     <td className="px-6 py-4">
                       <code className="text-xs text-slate-400 bg-slate-800/50 px-2 py-1 rounded">
-                        {payment.reference}
+                        {payment.transactionReference}
                       </code>
                     </td>
                     <td className="px-6 py-4">
