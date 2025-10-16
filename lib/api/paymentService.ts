@@ -1,7 +1,7 @@
 import { CreatePaymentData } from "@/lib/types";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  "https://florin-server.vercel.app/api" // "http://localhost:5000/api";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("accessToken");

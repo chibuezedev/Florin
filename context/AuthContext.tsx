@@ -4,7 +4,7 @@ import type React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { biometricTracker } from "../lib/biometricTracker";
 
-const ENDPOINT = "http://localhost:5000/api";
+const ENDPOINT = "https://florin-server.vercel.app/api"; //"http://localhost:5000/api";
 
 type User = {
   id: string;
