@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import type { Notification } from "@/lib/mock-data"
+import type { Notification } from "@/lib/types"
 import { Bell, AlertTriangle, CheckCircle, Clock } from "lucide-react"
 
 interface NotificationStatsProps {

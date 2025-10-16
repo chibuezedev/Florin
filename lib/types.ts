@@ -144,7 +144,7 @@ export interface Notification {
   message: string
   timestamp: string
   read: boolean
-  priority: "low" | "medium" | "high"
+  priority: "low" | "medium" | "high" | "critical"
   actionUrl?: string
   userId?: string
   userName?: string
