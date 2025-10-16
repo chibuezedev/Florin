@@ -66,7 +66,7 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
               )}
               <div className="flex items-center gap-2 text-sm text-slate-400">
                 <Calendar className="h-4 w-4" />
-                Joined {formatDate(user.joinedDate)}
+                Joined {formatDate(user.createdAt)}
               </div>
             </div>
           </div>
