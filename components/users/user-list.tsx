@@ -131,11 +131,11 @@ export function UserList({ users }: UserListProps) {
                   <Badge className={`border ${getRoleBadgeColor(user.role)} capitalize`}>{user.role}</Badge>
                   {user.department && <p className="mt-1 text-xs text-slate-500">{user.department}</p>}
                 </div>
-                <Link href={`/admin/users/${user._id}`}>
+                {/* <Link href={`/admin/users/${user._id}`}>
                   <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-white">
                     <Eye className="h-4 w-4" />
                   </Button>
-                </Link>
+                </Link> */}
               </div>
             </div>
           ))}
