@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 export default function UserProfilePage({
   params,
 }: {
-  params: { id: string };
+  params: { id: any };
 }) {
   const { users } = useUsers();
   const { payments, loading, error } = useAllPayments();
