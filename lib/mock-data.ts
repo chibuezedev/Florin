@@ -73,6 +73,49 @@ export const mockAIAlerts: AIAlert[] = [
   },
 ];
 
+export const mockTransactions = [
+  {
+    id: "1",
+    type: "credit",
+    description: "Wallet Top-up",
+    amount: 50000,
+    date: "2024-02-10",
+    balance: 125000,
+    userName: "Paul",
+    status: "paid",
+  },
+  {
+    id: "2",
+    type: "debit",
+    description: "Tuition Payment",
+    amount: 250000,
+    date: "2024-02-08",
+    balance: 75000,
+    userName: "Chibueze",
+    status: "paid",
+  },
+  {
+    id: "3",
+    type: "credit",
+    description: "Refund - Library Fee",
+    amount: 5000,
+    date: "2024-02-05",
+    balance: 325000,
+    userName: "Paul",
+    status: "paid",
+  },
+  {
+    id: "4",
+    type: "debit",
+    description: "Accommodation Fee",
+    amount: 80000,
+    date: "2024-02-01",
+    balance: 320000,
+    userName: "Paul",
+    status: "paid",
+  },
+];
+
 export const mockAccessLogs: AccessLog[] = [
   {
     id: "l1",
