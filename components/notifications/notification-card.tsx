@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import type { Notification } from "@/lib/mock-data"
+import type { Notification } from "@/lib/types"
 import { formatRelativeTime } from "@/lib/utils/format"
 import { AlertTriangle, DollarSign, Settings, User, ExternalLink } from "lucide-react"
 
