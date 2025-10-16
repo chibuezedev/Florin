@@ -6,13 +6,14 @@ import { PaymentHistory } from "@/components/users/payment-history";
 import { AccessLogs } from "@/components/users/access-logs";
 import { notFound } from "next/navigation";
 
-export default function UserProfilePage({
-  params,
-}: {
-  params: { id: any };
-}) {
+interface UserProfilePageProps {
+  params: { id: string };
+}
+
+export default function UserProfilePage({ params }: UserProfilePageProps) {
   const { users } = useUsers();
-  const { payments, loading, error } = useAllPayments();
+  const { payments } = useAllPayments();
+
   const user = users.find((u) => u.id === params.id);
 
   if (!user) {
