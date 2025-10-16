@@ -1,3 +1,5 @@
+"use client";
+
 import { mockAccessLogs } from "@/lib/mock-data";
 import { useAllPayments } from "@/hooks/usePayments";
 import { useUsers } from "@/hooks/useUser";
