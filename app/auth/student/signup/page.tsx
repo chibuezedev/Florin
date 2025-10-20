@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const departments = [
   "Computer Science",
@@ -25,6 +26,7 @@ const departments = [
 export default function StudentSignupPage() {
   const router = useRouter();
   const { register, isLoading } = useAuth();
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -58,7 +60,11 @@ export default function StudentSignupPage() {
     const response = await register(userData);
 
     if (response) {
-       router.push("/student/dashboard");
+      toast({
+        title: "Registration Successful",
+        description: "Welcome aboard! Redirecting to dashboard...",
+      });
+      router.push("/student/dashboard");
     } else {
       setLoading(false);
     }

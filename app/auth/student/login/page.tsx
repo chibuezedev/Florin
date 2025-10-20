@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
@@ -10,10 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function StudentLoginPage() {
   const router = useRouter();
   const { login, error, isLoading } = useAuth();
+  const [buttonText, setButtonText] = useState<string>("Sign In");
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -24,6 +27,7 @@ export default function StudentLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setButtonText("Signing In...");
 
     const credentials = {
       studentId: formData.regNumber,
@@ -33,11 +37,27 @@ export default function StudentLoginPage() {
     const success = await login(credentials);
 
     if (success) {
+      toast({
+        title: "Login Successful",
+        description: "Welcome back! Redirecting to dashboard...",
+      });
       localStorage.setItem("studentRegNumber", formData.regNumber);
       router.push("/student/dashboard");
     }
     setLoading(false);
+    setButtonText("Success");
   };
+
+  useEffect(() => {
+    if (error) {
+      setButtonText("Sign In");
+      toast({
+        title: "Login Failed",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
 
   if (isLoading) {
     return (
@@ -133,9 +153,9 @@ export default function StudentLoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-gold-500 hover:bg-gold-600 text-navy-950 font-semibold"
+              className="w-full bg-gold-500 hover:bg-gold-600 text-navy-950 font-semibold cursor-pointer"
             >
-              Sign In
+              {buttonText}
             </Button>
           </form>
           <div className="mt-6 text-center text-sm text-slate-400">

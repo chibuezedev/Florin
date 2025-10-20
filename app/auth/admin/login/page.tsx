@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Shield, ArrowLeft, Eye, EyeOff } from "lucide-react";
@@ -9,9 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminLoginPage() {
   const { login, error, isLoading } = useAuth();
+  const [buttonText, setButtonText] = useState<string>("Sign In");
+  const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -23,16 +26,32 @@ export default function AdminLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setButtonText("Signing In...");
 
     const credentials = { email: formData.email, password: formData.password };
 
     const success = await login(credentials);
 
     if (success) {
+      toast({
+        title: "Login Successful",
+        description: "Welcome back! Redirecting to dashboard...",
+      });
       router.push("/admin/dashboard");
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      setButtonText("Sign In");
+      toast({
+        title: "Login Failed",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
 
   if (isLoading) {
     return (
@@ -41,7 +60,7 @@ export default function AdminLoginPage() {
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
@@ -125,9 +144,9 @@ export default function AdminLoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-gold-500 hover:bg-gold-600 text-navy-950 font-semibold"
+              className="w-full bg-gold-500 hover:bg-gold-600 text-navy-950 font-semibold cursor-pointer"
             >
-              Sign In to Dashboard
+              {buttonText}
             </Button>
           </form>
           <div className="mt-6 p-4 rounded-lg bg-gold-500/5 border border-gold-500/20">
@@ -151,7 +170,7 @@ export default function AdminLoginPage() {
             href="mailto:support@university.edu"
             className="text-gold-400 hover:text-gold-300"
           >
-            support@university.edu
+            support@unifinance.edu
           </a>
         </p>
       </div>
