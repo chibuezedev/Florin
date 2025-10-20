@@ -129,8 +129,8 @@ export default function NotificationsPage() {
                 onClick={() => setFilter("all")}
                 className={
                   filter === "all"
-                    ? "bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold"
-                    : "bg-slate-800/50 border-white/10 text-white hover:bg-slate-800"
+                    ? "bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold cursor-pointer"
+                    : "bg-slate-800/50 border-white/10 text-white hover:bg-slate-800 cursor-pointer"
                 }
               >
                 All ({notifications.length})
@@ -141,8 +141,8 @@ export default function NotificationsPage() {
                 onClick={() => setFilter("unread")}
                 className={
                   filter === "unread"
-                    ? "bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold"
-                    : "bg-slate-800/50 border-white/10 text-white hover:bg-slate-800"
+                    ? "bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold cursor-pointer"
+                    : "bg-slate-800/50 border-white/10 text-white hover:bg-slate-800 cursor-pointer"
                 }
               >
                 Unread ({unreadCount})

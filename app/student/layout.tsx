@@ -32,10 +32,12 @@ export default function StudentLayout({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+    <div className="flex h-screen overflow-hidden bg-black">
       <StudentSidebar />
       <div className="flex flex-1 flex-col overflow-hidden pl-64">
-        <main className="flex-1 overflow-y-auto p-8">{children}</main>
+        <main className="flex-1 overflow-y-auto p-8 bg-black text-white">
+          {children}
+        </main>
       </div>
     </div>
   );

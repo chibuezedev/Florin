@@ -75,7 +75,7 @@
 }
 
 @theme inline {
-  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-sans);
 
   /* Navy and Gold University Theme */
   --color-navy-950: #020617;
