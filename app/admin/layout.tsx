@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import "../globals.css";
+import { FloatingNavigator } from "@/components/layout/floating-navigator";
 
 export default function AdminLayout({
   children,
@@ -48,6 +49,7 @@ export default function AdminLayout({
       <div className="flex flex-1 flex-col overflow-hidden pl-64">
         <Header />
         <main className="flex-1 overflow-y-auto">{children}</main>
+             <FloatingNavigator />
       </div>
     </div>
   );

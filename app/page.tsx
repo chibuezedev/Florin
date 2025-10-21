@@ -126,8 +126,7 @@ export default function LandingPage() {
             variants={itemVariants}
             className="mx-auto mt-8 max-w-2xl text-lg md:text-xl text-black/60 leading-relaxed text-pretty"
           >
-            A comprehensive financial platform with AI-driven security
-            monitoring for students and administrators
+            A financial platform with AI-driven security monitoring for students and administrators
           </motion.p>
         </motion.div>
 
