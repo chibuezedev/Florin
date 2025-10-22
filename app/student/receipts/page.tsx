@@ -61,7 +61,6 @@ export default function ReceiptsPage() {
           </p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-slate-900/50 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-4">
