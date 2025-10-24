@@ -4,8 +4,7 @@ import type React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { biometricTracker } from "../lib/biometricTracker";
 
-const ENDPOINT = "https://florin-server.vercel.app/api";
-// const ENDPOINT = "http://localhost:5000/api";
+const ENDPOINT = process.env.NEXT_PUBLIC_API_BASE_URL
 
 type User = {
   id: string;

@@ -1,4 +1,3 @@
-const API_BASE_URL = "https://florin-server.vercel.app/api"; //"http://localhost:5000/api";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("accessToken");
@@ -7,6 +6,8 @@ const getAuthHeaders = () => {
     Authorization: `Bearer ${token}`,
   };
 };
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 export const biometricsService = {
   getBiometrics: async () => {

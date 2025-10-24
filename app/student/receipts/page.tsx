@@ -1,59 +1,77 @@
 "use client";
 import { useState } from "react";
-import { Download, Eye, FileText, Search, CheckCircle2 } from "lucide-react";
+import {
+  Download,
+  Eye,
+  FileText,
+  Search,
+  CheckCircle2,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
+import jsPDF from "jspdf";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-const mockReceipts = [
-  {
-    id: "1",
-    receiptNumber: "RCP-2024-001",
-    description: "Tuition Fee - First Semester",
-    amount: 250000,
-    date: "2024-01-15",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-    downloadCount: 3,
-  },
-  {
-    id: "2",
-    receiptNumber: "RCP-2024-002",
-    description: "Accommodation Fee",
-    amount: 80000,
-    date: "2024-01-20",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-    downloadCount: 1,
-  },
-  {
-    id: "3",
-    receiptNumber: "RCP-2024-003",
-    description: "Library Fee",
-    amount: 5000,
-    date: "2024-01-18",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-    downloadCount: 2,
-  },
-  {
-    id: "4",
-    receiptNumber: "RCP-2024-004",
-    description: "Medical Fee",
-    amount: 10000,
-    date: "2024-01-22",
-    semester: "First Semester",
-    academicYear: "2023/2024",
-    downloadCount: 0,
-  },
-];
+import { useAllReceipts } from "@/hooks/usePayments";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function ReceiptsPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { receipts, loading, error } = useAllReceipts();
+
+  const handleDownload = (receipt: any) => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(20);
+    doc.text("Payment Receipt", 105, 20, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.text(`Receipt Number: ${receipt.receiptNumber}`, 20, 40);
+    doc.text(`Student: ${receipt.studentId?.name || "N/A"}`, 20, 50);
+    doc.text(`Amount Paid: ₦${receipt.amount.toLocaleString()}`, 20, 60);
+    doc.text(`Description: ${receipt.description}`, 20, 70);
+    doc.text(
+      `Date: ${new Date(receipt.paidDate).toLocaleDateString()}`,
+      20,
+      80
+    );
+    doc.text(`Payment Method: ${receipt.paymentMethod || "N/A"}`, 20, 90);
+
+    doc.text("Thank you for your payment.", 20, 110);
+
+    doc.save(`${receipt.receiptNumber}.pdf`);
+  };
+
+  if (loading) {
+    return (
+      <div className="p-8">
+        <div className="max-w-5xl mx-auto flex items-center justify-center h-96">
+          <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8">
+        <div className="max-w-5xl mx-auto">
+          <Alert className="bg-red-500/10 border-red-500/20">
+            <AlertCircle className="h-4 w-4 text-red-400" />
+            <AlertDescription className="text-red-400">
+              {error}
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Receipts</h1>
           <p className="text-slate-400">
@@ -68,7 +86,7 @@ export default function ReceiptsPage() {
                 <FileText className="h-6 w-6 text-amber-400" />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-1">12</h3>
+            <h3 className="text-2xl font-bold text-white mb-1">{receipts.length}</h3>
             <p className="text-sm text-slate-400">Total Receipts</p>
           </div>
 
@@ -78,7 +96,7 @@ export default function ReceiptsPage() {
                 <CheckCircle2 className="h-6 w-6 text-emerald-400" />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-1">₦345,000</h3>
+            <h3 className="text-2xl font-bold text-white mb-1">{receipts.reduce((acc, receipt) => acc + receipt.amount, 0).toLocaleString()}</h3>
             <p className="text-sm text-slate-400">Total Amount</p>
           </div>
 
@@ -117,7 +135,7 @@ export default function ReceiptsPage() {
 
         {/* Receipts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockReceipts.map((receipt) => (
+          {receipts.map((receipt) => (
             <div
               key={receipt.id}
               className="bg-slate-900/50 border border-white/10 rounded-xl p-6 hover:border-amber-500/30 transition-all backdrop-blur-sm group"
@@ -127,7 +145,7 @@ export default function ReceiptsPage() {
                   <FileText className="h-6 w-6 text-amber-400" />
                 </div>
                 <span className="text-xs text-slate-400 bg-slate-800/50 px-2 py-1 rounded">
-                  Downloaded {receipt.downloadCount}x
+                  Downloaded {receipt.downloadCount || 0}x
                 </span>
               </div>
 
@@ -150,23 +168,31 @@ export default function ReceiptsPage() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-400">Date</span>
                   <span className="text-slate-300">
-                    {new Date(receipt.date).toLocaleDateString()}
+                    {new Date(receipt.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-400">Period</span>
-                  <span className="text-slate-300">{receipt.semester}</span>
+                  <span className="text-slate-300">
+                    {receipt.description.toLowerCase().includes("first")
+                      ? "First Semester"
+                      : receipt.description.toLowerCase().includes("second")
+                      ? "Second Semester"
+                      : receipt.semester}
+                  </span>
                 </div>
               </div>
 
               <div className="flex gap-2">
                 <Button
                   size="sm"
+                  onClick={() => handleDownload(receipt)}
                   className="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
+
                 <Button
                   size="sm"
                   variant="outline"

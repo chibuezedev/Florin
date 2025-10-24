@@ -3,7 +3,7 @@
 import useSWR from "swr";
 import { useState, useEffect } from "react";
 import { paymentService } from "../lib/api/paymentService";
-import { Transaction } from "../lib/types";
+import { Transaction, Receipt } from "../lib/types";
 import { Payment, CreatePaymentData } from "@/lib/types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -90,6 +90,34 @@ export const useAllPayments = () => {
   }, []);
 
   return { payments, loading, error };
+};
+
+export const useAllReceipts = () => {
+  const [receipts, setReceipts] = useState<Receipt[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchReceipts = async () => {
+      try {
+        setLoading(true);
+        const result = await paymentService.getReceipts();
+        if (result.success) {
+          setReceipts(result.data);
+        } else {
+          setError(result.message);
+        }
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReceipts();
+  }, []);
+
+  return { receipts, loading, error };
 };
 
 export const usePayouts = () => {

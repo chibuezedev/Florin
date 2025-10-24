@@ -10,6 +10,7 @@ import {
   Calendar,
   DollarSign,
 } from "lucide-react";
+import jsPDF from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -73,6 +74,29 @@ export default function PaymentHistoryPage() {
     }, 0);
     return formatCurrency(Math.floor(total));
   };
+
+    const handleDownload = (receipt: any) => {
+      const doc = new jsPDF();
+  
+      doc.setFontSize(20);
+      doc.text("Payment Receipt", 105, 20, { align: "center" });
+  
+      doc.setFontSize(12);
+      doc.text(`Transaction Number: ${receipt.transactionReference}`, 20, 40);
+      doc.text(`Student: ${receipt.studentId?.name || "N/A"}`, 20, 50);
+      doc.text(`Amount Paid: ₦${receipt.amount.toLocaleString()}`, 20, 60);
+      doc.text(`Description: ${receipt.description}`, 20, 70);
+      doc.text(
+        `Date: ${new Date(receipt.paidDate).toLocaleDateString()}`,
+        20,
+        80
+      );
+      doc.text(`Payment Status: ${receipt.status || "N/A"}`, 20, 90);
+  
+      doc.text("Thank you for your payment.", 20, 110);
+  
+      doc.save(`${receipt.receiptNumber}.pdf`);
+    };
 
   return (
     <div className="p-8">
@@ -233,6 +257,7 @@ export default function PaymentHistoryPage() {
                     </td>
                     <td className="px-6 py-4">
                       <Button
+                        onClick={() => handleDownload(payment)}
                         size="sm"
                         variant="ghost"
                         className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"

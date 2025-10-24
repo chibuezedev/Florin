@@ -1,7 +1,6 @@
 import { CreatePaymentData } from "@/lib/types";
 
-const API_BASE_URL =
-  "https://florin-server.vercel.app/api" // "http://localhost:5000/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("accessToken");
@@ -61,6 +60,13 @@ export const paymentService = {
         headers: getAuthHeaders(),
       }
     );
+    return response.json();
+  },
+
+  getReceipts: async () => {
+    const response = await fetch(`${API_BASE_URL}/payments/receipts`, {
+      headers: getAuthHeaders(),
+    });
     return response.json();
   },
 
