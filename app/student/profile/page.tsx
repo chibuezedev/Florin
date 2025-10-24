@@ -19,9 +19,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useProfile, useUpdateProfile } from "@/hooks/useUser";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
+  const { toast } = useToast();
   const {
     profile: fetchedProfile,
     loading: profileLoading,
@@ -83,7 +85,10 @@ export default function ProfilePage() {
 
     const result = await updateProfile(updateData);
     if (result) {
-      // Profile updated successfully
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been updated successfully.",
+      });
     }
   };
 
