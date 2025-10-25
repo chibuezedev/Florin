@@ -106,7 +106,6 @@ export interface AIAlert {
   description: string;
   timestamp: string;
   anomalyScore: number;
-  prediction: string;
   details: {
     typingRhythm?: number;
     accessPattern?: string;
