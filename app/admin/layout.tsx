@@ -22,7 +22,7 @@ export default function AdminLayout({
       return;
     }
 
-    if (!isLoading && user && user.role !== "admin") {
+    if (!isLoading && user && user.role !== "admin" && user.role !== "staff") {
       router.push("/unauthorized");
       return;
     }
@@ -49,7 +49,7 @@ export default function AdminLayout({
       <div className="flex flex-1 flex-col overflow-hidden pl-64">
         <Header />
         <main className="flex-1 overflow-y-auto">{children}</main>
-             <FloatingNavigator />
+        <FloatingNavigator />
       </div>
     </div>
   );
