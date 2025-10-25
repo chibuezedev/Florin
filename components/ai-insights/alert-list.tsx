@@ -303,11 +303,12 @@ export function AlertList() {
                     selectedAlert.severity || null
                   )} p-2`}
                 >
-                  {alertIcons[selectedAlert.type] &&
+                  {/* {alertIcons[selectedAlert.type] &&
                     (() => {
                       const Icon = alertIcons[selectedAlert.type];
                       return <Icon className="h-5 w-5" />;
-                    })()}
+                    })()} */}
+                  <Activity className="h-5 w-5" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-white">
