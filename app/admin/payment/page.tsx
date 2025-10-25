@@ -165,6 +165,8 @@ export default function CreatePaymentPage() {
     });
   };
 
+  console.log(createdPayments);
+
   const getPaymentTypeLabel = (type: string) => {
     const typeMap: Record<string, string> = {
       tuition: "Tuition Fee",
@@ -209,7 +211,7 @@ export default function CreatePaymentPage() {
           <div className="flex gap-3">
             <Button
               variant="outline"
-              className="border-slate-700 bg-slate-900/50 text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="border-slate-700 bg-slate-900/50 text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer"
               onClick={handleCancel}
               disabled={isCreating}
             >
@@ -217,7 +219,7 @@ export default function CreatePaymentPage() {
               Cancel
             </Button>
             <Button
-              className="bg-amber-500 text-slate-950 hover:bg-amber-400"
+              className="bg-amber-500 text-slate-950 hover:bg-amber-400 cursor-pointer"
               onClick={handleCreatePayment}
               disabled={isCreating}
             >
@@ -255,7 +257,7 @@ export default function CreatePaymentPage() {
                       Payment Type
                     </Label>
                     <Select value={paymentType} onValueChange={setPaymentType}>
-                      <SelectTrigger className="border-slate-700 bg-slate-900 text-white">
+                      <SelectTrigger className="border-slate-700 bg-slate-900 text-white cursor-pointer">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent className="border-slate-700 bg-slate-900">
@@ -590,7 +592,7 @@ export default function CreatePaymentPage() {
               </CardTitle>
               <Badge
                 variant="outline"
-                className="border-slate-700 bg-slate-900 text-slate-300"
+                className="border-amber-500/30 bg-amber-500/10 text-amber-400"
               >
                 {createdPayments.length} Total
               </Badge>
@@ -598,21 +600,21 @@ export default function CreatePaymentPage() {
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="flex items-center justify-center py-12">
+              <div className="flex items-center justify-center py-16">
                 <div className="text-center">
-                  <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-700 border-t-amber-500" />
-                  <p className="mt-4 text-sm text-slate-400">
-                    Loading payments...
-                  </p>
+                  <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-slate-700 border-t-amber-500" />
+                  <p className="mt-4 text-slate-400">Loading payments...</p>
                 </div>
               </div>
             ) : createdPayments.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <FileText className="h-12 w-12 text-slate-700" />
-                <p className="mt-4 text-sm text-slate-400">
+              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-700 py-16">
+                <div className="rounded-full bg-slate-800 p-4">
+                  <FileText className="h-8 w-8 text-slate-600" />
+                </div>
+                <p className="mt-4 font-medium text-slate-300">
                   No payments created yet
                 </p>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   Create your first payment above to get started
                 </p>
               </div>
@@ -621,173 +623,218 @@ export default function CreatePaymentPage() {
                 {createdPayments.map((payment) => (
                   <Card
                     key={payment._id}
-                    className="border-slate-800 bg-slate-900"
+                    className="group overflow-hidden border-slate-800 bg-gradient-to-br from-slate-900 to-slate-900/50 transition-all hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/5"
                   >
-                    <CardContent className="p-4">
-                      <div className="grid gap-4 md:grid-cols-[1fr,auto]">
-                        <div className="space-y-3">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                <h3 className="font-semibold text-white">
-                                  {payment.title}
-                                </h3>
-                                <Badge
-                                  variant="outline"
-                                  className={
-                                    payment.isActive
-                                      ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
-                                      : "border-slate-600 bg-slate-800 text-slate-400"
-                                  }
-                                >
-                                  {payment.isActive ? "Active" : "Inactive"}
-                                </Badge>
-                              </div>
-                              <p className="mt-1 text-sm text-slate-400">
-                                {payment.description}
-                              </p>
+                    <CardContent className="p-0">
+                      {/* Header Section */}
+                      <div className="border-b border-slate-800 bg-slate-950/50 p-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="text-lg font-semibold text-white">
+                                {payment.title}
+                              </h3>
+                              <Badge
+                                variant="outline"
+                                className={
+                                  payment.isActive
+                                    ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
+                                    : "border-slate-600 bg-slate-800 text-slate-400"
+                                }
+                              >
+                                {payment.isActive ? "Active" : "Inactive"}
+                              </Badge>
                             </div>
-                            <div className="text-right">
+                            <p className="text-sm text-slate-400 line-clamp-2">
+                              {payment.description}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <div className="rounded-lg bg-amber-500/10 px-3 py-2 border border-amber-500/20">
                               <p className="text-2xl font-bold text-amber-400">
                                 {formatCurrency(payment.amount)}
                               </p>
-                              <p className="text-xs text-slate-500">
+                              <p className="text-xs text-amber-300/70 mt-0.5">
                                 {getPaymentTypeLabel(payment.paymentType)}
                               </p>
                             </div>
                           </div>
-
-                          <div className="flex flex-wrap gap-2">
-                            <Badge
-                              variant="outline"
-                              className="border-slate-700 bg-slate-800 text-slate-300"
-                            >
-                              <Calendar className="mr-1 h-3 w-3" />
-                              {payment.semester}
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="border-slate-700 bg-slate-800 text-slate-300"
-                            >
-                              {payment.academicYear}
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="border-slate-700 bg-slate-800 text-slate-300"
-                            >
-                              Due: {formatDate(payment.dueDate)}
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="border-blue-500/50 bg-blue-500/10 text-blue-400"
-                            >
-                              <Users className="mr-1 h-3 w-3" />
-                              {payment.targetType === "all"
-                                ? "All Students"
-                                : payment.targetType === "department"
-                                ? `${payment.departments?.length || 0} Dept(s)`
-                                : payment.targetType === "faculty"
-                                ? `${payment.faculties?.length || 0} Faculty(s)`
-                                : `${payment.levels?.length || 0} Level(s)`}
-                            </Badge>
-                          </div>
-
-                          {payment.targetType !== "all" && (
-                            <div className="flex flex-wrap gap-1">
-                              {payment.departments?.map((dept) => (
-                                <Badge
-                                  key={dept}
-                                  variant="outline"
-                                  className="border-slate-700 bg-slate-800/50 text-xs text-slate-400"
-                                >
-                                  {dept}
-                                </Badge>
-                              ))}
-                              {payment.faculties?.map((faculty) => (
-                                <Badge
-                                  key={faculty}
-                                  variant="outline"
-                                  className="border-slate-700 bg-slate-800/50 text-xs text-slate-400"
-                                >
-                                  {faculty}
-                                </Badge>
-                              ))}
-                              {payment.levels?.map((level) => (
-                                <Badge
-                                  key={level}
-                                  variant="outline"
-                                  className="border-slate-700 bg-slate-800/50 text-xs text-slate-400"
-                                >
-                                  {level}L
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
                         </div>
 
-                        <div className="flex flex-col gap-2 md:min-w-[200px]">
-                          <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">
-                            <div className="flex items-center gap-2 text-emerald-400">
-                              <CheckCircle2 className="h-4 w-4" />
-                              <span className="text-xs font-medium">Paid</span>
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          <Badge
+                            variant="outline"
+                            className="border-slate-700 bg-slate-800/50 text-slate-300"
+                          >
+                            <Calendar className="mr-1.5 h-3 w-3" />
+                            {payment.semester}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className="border-slate-700 bg-slate-800/50 text-slate-300"
+                          >
+                            {payment.academicYear}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className="border-orange-500/50 bg-orange-500/10 text-orange-400"
+                          >
+                            <Clock className="mr-1.5 h-3 w-3" />
+                            Due: {formatDate(payment.dueDate)}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className="border-blue-500/50 bg-blue-500/10 text-blue-400"
+                          >
+                            <Users className="mr-1.5 h-3 w-3" />
+                            {payment.targetType === "all"
+                              ? "All Students"
+                              : payment.targetType === "department"
+                              ? `${payment.departments?.length || 0} Dept(s)`
+                              : payment.targetType === "faculty"
+                              ? `${payment.faculties?.length || 0} Faculty(s)`
+                              : `${payment.levels?.length || 0} Level(s)`}
+                          </Badge>
+                        </div>
+
+                        {/* Target Details */}
+                        {payment.targetType !== "all" && (
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {payment.departments?.map((dept) => (
+                              <Badge
+                                key={dept}
+                                variant="outline"
+                                className="border-slate-700/50 bg-slate-800/30 text-xs text-slate-400"
+                              >
+                                {dept}
+                              </Badge>
+                            ))}
+                            {payment.faculties?.map((faculty) => (
+                              <Badge
+                                key={faculty}
+                                variant="outline"
+                                className="border-slate-700/50 bg-slate-800/30 text-xs text-slate-400"
+                              >
+                                {faculty}
+                              </Badge>
+                            ))}
+                            {payment.levels?.map((level) => (
+                              <Badge
+                                key={level}
+                                variant="outline"
+                                className="border-slate-700/50 bg-slate-800/30 text-xs text-slate-400"
+                              >
+                                {level}L
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+                        <div className="relative overflow-hidden rounded-lg border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-4">
+                          <div className="relative z-10">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="rounded-full bg-emerald-500/20 p-1.5">
+                                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                              </div>
+                              <span className="text-xs font-semibold uppercase tracking-wide text-emerald-400">
+                                Paid
+                              </span>
                             </div>
-                            <div className="mt-1 flex items-baseline gap-2">
-                              <p className="text-2xl font-bold text-white">
+                            <div className="flex items-baseline gap-2">
+                              <p className="text-3xl font-bold text-white">
                                 {payment.paidCount || 0}
                               </p>
-                              <span className="text-xs text-slate-500">
+                              <span className="text-sm text-slate-400">
                                 / {payment.appliedToCount || 0}
                               </span>
                             </div>
-                            <p className="mt-1 text-xs text-slate-400">
-                              {payment.appliedToCount > 0
-                                ? `${Math.round(
-                                    ((payment.paidCount || 0) /
-                                      payment.appliedToCount) *
-                                      100
-                                  )}%`
-                                : "0%"}
-                            </p>
+                            <div className="mt-2">
+                              <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
+                                <div
+                                  className="h-full bg-emerald-500 transition-all duration-500"
+                                  style={{
+                                    width: `${
+                                      payment.appliedToCount > 0
+                                        ? ((payment.paidCount || 0) /
+                                            payment.appliedToCount) *
+                                          100
+                                        : 0
+                                    }%`,
+                                  }}
+                                />
+                              </div>
+                              <p className="mt-1.5 text-xs text-emerald-400/80 font-medium">
+                                {payment.appliedToCount > 0
+                                  ? `${Math.round(
+                                      ((payment.paidCount || 0) /
+                                        payment.appliedToCount) *
+                                        100
+                                    )}% completion`
+                                  : "0% completion"}
+                              </p>
+                            </div>
                           </div>
+                          <div className="absolute -right-4 -bottom-4 h-24 w-24 rounded-full bg-emerald-500/5" />
+                        </div>
 
-                          <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">
-                            <div className="flex items-center gap-2 text-amber-400">
-                              <Clock className="h-4 w-4" />
-                              <span className="text-xs font-medium">
+                        {/* Pending Stats */}
+                        <div className="relative overflow-hidden rounded-lg border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-amber-500/5 p-4">
+                          <div className="relative z-10">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="rounded-full bg-amber-500/20 p-1.5">
+                                <Clock className="h-4 w-4 text-amber-400" />
+                              </div>
+                              <span className="text-xs font-semibold uppercase tracking-wide text-amber-400">
                                 Pending
                               </span>
                             </div>
-                            <div className="mt-1 flex items-baseline gap-2">
-                              <p className="text-2xl font-bold text-white">
+                            <div className="flex items-baseline gap-2">
+                              <p className="text-3xl font-bold text-white">
                                 {payment.pendingCount || 0}
                               </p>
                             </div>
-                            <p className="mt-1 text-xs text-slate-400">
+                            <p className="mt-2 text-sm text-slate-400">
+                              Outstanding Amount
+                            </p>
+                            <p className="text-lg font-semibold text-amber-400">
                               {formatCurrency(
-                                (payment.pendingCount || 0) * payment.amount
+                                (payment.appliedToCount - payment.paidCount ||
+                                  0) * payment.amount
                               )}
                             </p>
                           </div>
+                          <div className="absolute -right-4 -bottom-4 h-24 w-24 rounded-full bg-amber-500/5" />
+                        </div>
 
-                          <div className="rounded-lg border border-slate-800 bg-slate-950 p-3">
-                            <div className="flex items-center gap-2 text-blue-400">
-                              <DollarSign className="h-4 w-4" />
-                              <span className="text-xs font-medium">
+                        {/* Revenue Stats */}
+                        <div className="relative overflow-hidden rounded-lg border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-blue-500/5 p-4">
+                          <div className="relative z-10">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="rounded-full bg-blue-500/20 p-1.5">
+                                <DollarSign className="h-4 w-4 text-blue-400" />
+                              </div>
+                              <span className="text-xs font-semibold uppercase tracking-wide text-blue-400">
                                 Revenue
                               </span>
                             </div>
-                            <p className="mt-1 text-lg font-bold text-white">
+                            <p className="text-2xl font-bold text-white">
                               {formatCurrency(
                                 (payment.paidCount || 0) * payment.amount
                               )}
                             </p>
-                            <p className="mt-1 text-xs text-slate-400">
-                              of{" "}
+                            <p className="mt-2 text-xs text-slate-400">
+                              Expected Total
+                            </p>
+                            <p className="text-sm font-medium text-blue-400">
                               {formatCurrency(
                                 payment.totalExpectedRevenue || 0
                               )}
                             </p>
                           </div>
+                          <div className="absolute -right-4 -bottom-4 h-24 w-24 rounded-full bg-blue-500/5" />
                         </div>
                       </div>
                     </CardContent>

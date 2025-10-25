@@ -89,7 +89,7 @@ export function StudentSidebar() {
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 rounded-md hover:bg-red-500/10 text-slate-400 hover:text-red-400 transition-colors"
+              className="p-2 rounded-md hover:bg-red-500/10 text-slate-400 hover:text-red-400 transition-colors cursor-pointer"
               title="Logout"
             >
               <LogOut size={18} />

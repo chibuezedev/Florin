@@ -23,34 +23,31 @@ import {
   YAxis,
   Legend,
 } from "recharts";
-
-const monthlyData = [
-  { month: "Jul", revenue: 2100000, transactions: 280, users: 1180 },
-  { month: "Aug", revenue: 2350000, transactions: 310, users: 1195 },
-  { month: "Sep", revenue: 2650000, transactions: 295, users: 1210 },
-  { month: "Oct", revenue: 2400000, transactions: 320, users: 1225 },
-  { month: "Nov", revenue: 2550000, transactions: 305, users: 1235 },
-  { month: "Dec", revenue: 2750000, transactions: 330, users: 1242 },
-  { month: "Jan", revenue: 2847500, transactions: 342, users: 1247 },
-];
-
-const departmentData = [
-  { department: "Computer Science", amount: 850000 },
-  { department: "Engineering", amount: 720000 },
-  { department: "Business", amount: 650000 },
-  { department: "Mathematics", amount: 420000 },
-  { department: "Arts", amount: 380000 },
-];
+import { useDashboard } from "@/hooks/useDashboard";
 
 export default function DashboardPage() {
+  const { dashboardData, loading, error } = useDashboard();
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+
+  const stats = dashboardData?.summary;
+  const monthlyData = dashboardData?.monthlyData || [];
+  const departmentData = dashboardData?.departmentData || [];
+  const recentTransactions = dashboardData?.recentTransactions || [];
+
   return (
     <div className="min-h-screen bg-slate-950 p-8">
       <div className="mx-auto max-w-7xl space-y-8">
         <div>
           <h1 className="text-4xl font-bold text-white">Dashboard Overview</h1>
-          <p className="mt-2 text-slate-400">
-            Insight and general overview
-          </p>
+          <p className="mt-2 text-slate-400">Insight and general overview</p>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card className="border-slate-800 bg-slate-900/50 p-6 backdrop-blur">
@@ -64,7 +61,9 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="mb-1 text-sm text-slate-400">Total Revenue</p>
-            <p className="text-3xl font-bold text-white">₦45.2M</p>
+            <p className="text-3xl font-bold text-white">
+              {loading ? "..." : formatCurrency(stats?.totalRevenue)}
+            </p>
           </Card>
 
           <Card className="border-slate-800 bg-slate-900/50 p-6 backdrop-blur">
@@ -74,11 +73,15 @@ export default function DashboardPage() {
               </div>
               <div className="flex items-center gap-1 text-sm text-emerald-400">
                 <ArrowUpRight className="h-4 w-4" />
-                <span>8.2%</span>
+                <span>
+                  {loading ? "..." : `${stats?.monthlyGrowthPercent || 0}%`}
+                </span>
               </div>
             </div>
             <p className="mb-1 text-sm text-slate-400">Monthly Growth</p>
-            <p className="text-3xl font-bold text-white">₦3.8M</p>
+            <p className="text-3xl font-bold text-white">
+              {loading ? "..." : formatCurrency(stats?.monthlyGrowth || 0)}
+            </p>
           </Card>
 
           <Card className="border-slate-800 bg-slate-900/50 p-6 backdrop-blur">
@@ -88,11 +91,15 @@ export default function DashboardPage() {
               </div>
               <div className="flex items-center gap-1 text-sm text-red-400">
                 <ArrowDownRight className="h-4 w-4" />
-                <span>3 Active</span>
+                <span>
+                  {loading ? "..." : `${stats?.securityAlerts || 0} Active`}
+                </span>
               </div>
             </div>
             <p className="mb-1 text-sm text-slate-400">Security Alerts</p>
-            <p className="text-3xl font-bold text-white">3</p>
+            <p className="text-3xl font-bold text-white">
+              {loading ? "..." : stats?.securityAlerts || 0}
+            </p>
           </Card>
 
           <Card className="border-slate-800 bg-slate-900/50 p-6 backdrop-blur">
@@ -102,11 +109,15 @@ export default function DashboardPage() {
               </div>
               <div className="flex items-center gap-1 text-sm text-emerald-400">
                 <ArrowUpRight className="h-4 w-4" />
-                <span>156</span>
+                <span>
+                  {loading ? "..." : `${stats?.activeUsers || 0} Active`}
+                </span>
               </div>
             </div>
             <p className="mb-1 text-sm text-slate-400">Active Users</p>
-            <p className="text-3xl font-bold text-white">12,458</p>
+            <p className="text-3xl font-bold text-white">
+              {loading ? "..." : (stats?.activeUsers || 0).toLocaleString()}
+            </p>
           </Card>
         </div>
         <div className="grid gap-4 md:grid-cols-4">
@@ -294,27 +305,35 @@ export default function DashboardPage() {
             Recent Transactions
           </h3>
           <div className="space-y-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between border-b border-slate-800/50 py-3 last:border-0"
-              >
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    Student Payment - REG/2024/001{i}
-                  </p>
-                  <p className="mt-1 text-xs text-slate-400">
-                    Computer Science Department
-                  </p>
+            {loading ? (
+              <p className="text-slate-400 text-center py-4">Loading...</p>
+            ) : recentTransactions.length === 0 ? (
+              <p className="text-slate-400 text-center py-4">
+                No recent transactions
+              </p>
+            ) : (
+              recentTransactions.map((txn: any) => (
+                <div
+                  key={txn.id}
+                  className="flex items-center justify-between border-b border-slate-800/50 py-3 last:border-0"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      Student Payment - {txn.studentId}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-400">
+                      {txn.department}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-semibold text-emerald-400">
+                      ₦{txn.amount.toLocaleString()}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-500">{txn.timeAgo}</p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-emerald-400">
-                    ₦250,000
-                  </p>
-                  <p className="mt-1 text-xs text-slate-500">2 hours ago</p>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </Card>
       </div>
