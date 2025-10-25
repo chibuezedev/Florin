@@ -20,13 +20,23 @@ import { useAuth } from "@/context/AuthContext";
 const navigation = [
   { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
   { name: "Manage Payment", href: "/admin/payment", icon: Wallet },
-  { name: "Threat Detection", href: "/admin/ai-insights", icon: Shield },
+  {
+    name: "Threat Detection",
+    href: "/admin/ai-insights",
+    icon: Shield,
+    adminOnly: true,
+  },
   { name: "Students", href: "/admin/students", icon: GraduationCap },
-  { name: "Faculty", href: "/admin/faculty", icon: Users },
-  { name: "Departments", href: "/admin/departments", icon: Building2 },
-  { name: "Staff", href: "/admin/staff", icon: Briefcase },
+  // { name: "Faculty", href: "/admin/faculty", icon: Users },
+  // { name: "Departments", href: "/admin/departments", icon: Building2 },
+  {
+    name: "Staff",
+    href: "/admin/staff",
+    icon: Briefcase,
+    adminOnly: true,
+  },
   { name: "Users", href: "/admin/users", icon: UserCircle },
-  { name: "Notifications", href: "/admin/notifications", icon: Bell },
+  // { name: "Notifications", href: "/admin/notifications", icon: Bell },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
@@ -41,6 +51,14 @@ export function Sidebar() {
     router.push("/");
   };
 
+  // Filter navigation based on user role
+  const filteredNavigation = navigation.filter((item) => {
+    if (item.adminOnly) {
+      return user?.role === "admin";
+    }
+    return true;
+  });
+
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-slate-800 bg-navy-900">
       <div className="flex h-full flex-col">
@@ -52,7 +70,7 @@ export function Sidebar() {
         </div>
 
         <nav className="flex-1 space-y-1 px-3 py-4">
-          {navigation.map((item) => {
+          {filteredNavigation.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
 

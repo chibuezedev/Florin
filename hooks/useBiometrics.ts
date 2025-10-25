@@ -23,6 +23,8 @@ type Alert = {
   createdAt: string;
   resolvedAt?: string;
   notes?: string;
+  prediction: string;
+  confidence: string;
   details: {
     typingRhythm: any;
     transactionFrequency: any;

@@ -22,7 +22,7 @@ const navigation = [
   { name: "My Wallet", href: "/student/wallet", icon: Wallet },
   { name: "Receipts", href: "/student/receipts", icon: FileText },
   { name: "My Profile", href: "/student/profile", icon: User },
-  { name: "Notifications", href: "/student/notifications", icon: Bell },
+  // { name: "Notifications", href: "/student/notifications", icon: Bell },
   { name: "Settings", href: "/student/settings", icon: Settings },
 ];
 
