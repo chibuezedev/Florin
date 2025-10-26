@@ -83,9 +83,9 @@ export default function LandingPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-black/20 text-black hover:bg-black/5 bg-transparent font-medium"
+                  className="border-black/20 text-black hover:bg-black/5 bg-transparent font-medium cursor-pointer"
                 >
-                  Uni Portal
+                  Admin Login
                 </Button>
               </Link>
             </nav>
