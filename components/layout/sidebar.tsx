@@ -9,7 +9,7 @@ import {
   Building2,
   Briefcase,
   Shield,
-  Bell,
+  Landmark,
   Settings,
   LogOut,
   UserCircle,
@@ -28,7 +28,6 @@ const navigation = [
   },
   { name: "Students", href: "/admin/students", icon: GraduationCap },
   // { name: "Faculty", href: "/admin/faculty", icon: Users },
-  // { name: "Departments", href: "/admin/departments", icon: Building2 },
   {
     name: "Staff",
     href: "/admin/staff",
@@ -36,6 +35,7 @@ const navigation = [
     adminOnly: true,
   },
   { name: "Users", href: "/admin/users", icon: UserCircle },
+  { name: "Withdrawal", href: "/admin/withdrawal", icon: Landmark },
   // { name: "Notifications", href: "/admin/notifications", icon: Bell },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
